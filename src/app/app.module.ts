@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MainViewComponent } from './main-view/main-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppNavComponent } from './app-nav/app-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -13,11 +12,17 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 
+import { MatGridListModule } from '@angular/material/grid-list';
+import {MatMenuModule} from "@angular/material/menu";
+import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
+import { ModulesViewComponent } from './modules-view/modules-view.component';
+import { HomeViewComponent } from './home-view/home-view.component';
 @NgModule({
   declarations: [
     AppComponent,
-    MainViewComponent,
-    AppNavComponent
+    AppNavComponent,
+    ModulesViewComponent,
+    HomeViewComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +33,10 @@ import { MatListModule } from '@angular/material/list';
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    MatGridListModule,
+    MatMenuModule,
+    MatBottomSheetModule
   ],
   providers: [],
   bootstrap: [AppComponent]

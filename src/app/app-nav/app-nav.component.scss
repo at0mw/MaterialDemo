@@ -1,5 +1,7 @@
 .sidenav-container {
-  height: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidenav {
@@ -12,6 +14,42 @@
 
 .mat-toolbar.mat-primary {
   position: sticky;
-  top: 0;
   z-index: 1;
+  //background-color: rgba(255,255,255, 0.2);
+  //color: black;
+  border-bottom: none;
+  height: 60px;
+}
+
+.top-toolbar {
+  top: 0;
+}
+
+.left-align {
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+}
+.right-align {
+  margin-left: auto;
+}
+
+.bottom-toolbar {
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.mat-sidenav-content {
+  height: 100vh
+}
+
+.main-view{
+  height: calc(100vh - 60px);
+}
+
+.list-selector{
+  display: flex;
+  align-items: center;
 }

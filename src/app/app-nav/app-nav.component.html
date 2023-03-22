@@ -1,27 +1,95 @@
 <mat-sidenav-container class="sidenav-container">
+
   <mat-sidenav #drawer class="sidenav" fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
-    <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item href="#">Link 1</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
-    </mat-nav-list>
+    <mat-toolbar>Rooms</mat-toolbar>
+    <ng-container *ngIf="availableViews.length > 0">
+      <mat-nav-list>
+<!--        <div class="list-selector">-->
+<!--          <a mat-list-item (click)="navigateToHome()" >-->
+<!--            <mat-icon aria-label="Side nav toggle icon">home</mat-icon>-->
+<!--            | Home</a>-->
+<!--        </div>-->
+<!--        <div class="list-selector">-->
+<!--          <a mat-list-item *ngFor="let view of availableViews" (click)="navigateToView(view.Id, view.Label)">-->
+<!--            <i [class]="view.Icon"></i>-->
+<!--            {{ view.Label }}-->
+<!--          </a>-->
+<!--        </div>-->
+        <a class="list-selector" mat-list-item (click)="navigateToHome()" >
+          <mat-icon aria-label="Side nav toggle icon">home</mat-icon>
+          | Home</a>
+        <a class="list-selector" mat-list-item *ngFor="let view of availableViews" (click)="navigateToView(view.Id, view.Label)">
+          <i [class]="view.Icon"></i>
+          {{ view.Label }}
+        </a>
+      </mat-nav-list>
+    </ng-container>
   </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+
+  <mat-menu #userMenu class="sidenav" [style.width.px]="200">
+    <ng-container *ngIf="availableUsers.length > 0">
+      <button mat-menu-item *ngFor="let user of availableUsers" (click)="selectUser(user, user)">
+        <i [class]="user"></i>
+        {{ user }}
       </button>
-      <span>MaterialDesignDemo</span>
+    </ng-container>
+    <ng-container *ngIf="availableUsers.length === 0">
+      <button mat-menu-item  (click)="selectUser('Default', 'Default')">
+        <i [class]="'Default'"></i>
+        {{ 'Default' }}
+      </button>
+    </ng-container>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="signIn()">Sign In</button>
+    <button *ngIf="availableUsers.length > 0" (click)="signOut()" mat-menu-item>Sign Out</button>
+  </mat-menu>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="top-toolbar">
+
+      <div class="left-align">
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()"
+          *ngIf="isHandset$ | async">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        <span class="text-menu">{{currentViewLabel}} <!--Could also put view Icon Here {{currentViewIcon}}--></span>
+      </div>
+      <div class="right-align">
+        <button
+          type="button"
+          aria-label="Toggle settings"
+          mat-icon-button>
+          <mat-icon aria-label="Side user toggle icon">settings</mat-icon>
+        </button>
+        <button
+          [matMenuTriggerFor]="userMenu"
+          type="button"
+          aria-label="Toggle userField"
+          mat-icon-button>
+          <mat-icon aria-label="Side user toggle icon">groups</mat-icon>
+        </button>
+      </div>
     </mat-toolbar>
-    <!-- Add Content Here -->
+
+    <div class="main-view">
+<!--      If home?-->
+      <app-home-view *ngIf="isHome"></app-home-view>
+<!--      If a room?-->
+      <app-modules-view *ngIf="!isHome"
+      [availableModules]="availableModules"
+      [moduleConfigMessages]="moduleConfigMessages"
+      ></app-modules-view>
+    </div>
   </mat-sidenav-content>
+
+
 </mat-sidenav-container>
+
+

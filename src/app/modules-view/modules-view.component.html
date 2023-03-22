@@ -1,0 +1,45 @@
+<div class="device-grid">
+  <mat-grid-list class="device-display-grid" cols="2" rowHeight="50%">
+    <mat-grid-tile *ngFor="availableTileModules">
+      <div class="grid-tile">Demo Module 1</div>
+    </mat-grid-tile>
+<!--    <mat-grid-tile>-->
+<!--      <div class="grid-tile">Demo Module 2</div>-->
+<!--    </mat-grid-tile>-->
+<!--    <mat-grid-tile>-->
+<!--      <div class="grid-tile">Demo Module 3</div>-->
+<!--    </mat-grid-tile>-->
+  </mat-grid-list>
+</div>
+
+<mat-toolbar color="primary" class="bottom-toolbar">
+  <div class="middle-align">
+    <button
+      type="button"
+      aria-label="Toggle Move Left"
+      mat-icon-button>
+      <mat-icon aria-label="Side nav toggle icon">arrow_back_ios</mat-icon>
+    </button>
+    <button
+      type="button"
+      aria-label="Toggle ShowDevices"
+      mat-icon-button
+      [matMenuTriggerFor]="deviceMenu">
+      <mat-icon aria-label="Side nav toggle icon">apps</mat-icon>
+    </button>
+    <button
+      type="button"
+      aria-label="Toggle Move Right"
+      mat-icon-button>
+      <mat-icon aria-label="Side nav toggle icon">arrow_forward_ios</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+
+<mat-menu #deviceMenu class="sidenav" [style.width.px]="200">
+  <ng-container *ngIf="availableModules.length > 0">
+    <button mat-menu-item *ngFor="let module of availableModules" (click)="selectModule(module.Id)">
+      {{ module.Label }}
+    </button>
+  </ng-container>
+</mat-menu>

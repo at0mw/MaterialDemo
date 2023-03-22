@@ -1,0 +1,25 @@
+.grid-tile{
+  border: 1px solid black;
+  outline: 1px solid red;
+  height:90%;
+  width:90%;
+  background-color: grey;
+}
+
+.device-grid{
+  padding:0;
+  height: calc( 100% - 60px );
+}
+
+.bottom-toolbar{
+  position: sticky;
+  z-index: 1;
+  //background-color: rgba(255,255,255, 0.2);
+  //color: black;
+  border-bottom: none;
+  height: 60px;
+}
+
+.middle-align{
+  margin: auto;
+}
