@@ -11,24 +11,24 @@ import {ModuleConfigMessage} from "../../models/interfaces/module.config.interfa
 export class ModulesViewComponent {
   // Uni-directional Data Flow
   @Input() availableModules: ModuleMessage[] = [];
-  @Input() availableModuleConfigs: ModuleConfigMessage[] = []
+  @Input() tileModulesConfig: ModuleConfigMessage[] = []
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.updateAvailableModules();
-    this.updateModuleConfigs();
-  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   this.updateAvailableModules();
+  //   this.updateModuleConfigs();
+  // }
 
-  updateAvailableModules(){
-    this.availableModules.forEach(module => {
-      console.log("Module: " + module.Label);
-    })
-  }
-
-  private updateModuleConfigs() {
-    this.availableModuleConfigs.forEach(module => {
-      console.log("Module Type: " + module.Type);
-    })
-  }
+  // updateAvailableModules(){
+  //   // this.availableModules.forEach(module => {
+  //   //   //console.log("Module: " + module.Label);
+  //   // })
+  // }
+  //
+  // private updateModuleConfigs() {
+  //   this.tileModulesConfig.forEach(module => {
+  //     console.log("Module Type: " + module.Type);
+  //   })
+  // }
 
   selectModule(Id: number) {
 

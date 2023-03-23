@@ -1,0 +1,17 @@
+<mat-sidenav #drawer class="sidenav" fixedInViewport
+             [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+             [mode]="(isHandset$ | async) ? 'over' : 'side'"
+             [opened]="(isHandset$ | async) === false">
+  <mat-toolbar>Rooms</mat-toolbar>
+  <ng-container *ngIf="availableViews.length > 0">
+    <mat-nav-list>
+      <a class="list-selector" mat-list-item (click)="navigateToHome()" >
+        <mat-icon aria-label="Side nav toggle icon">home</mat-icon>
+        | Home</a>
+      <a class="list-selector" mat-list-item *ngFor="let view of availableViews" (click)="navigateToView(view.Id, view.Label)">
+        <i [class]="view.Icon"></i>
+        {{ view.Label }}
+      </a>
+    </mat-nav-list>
+  </ng-container>
+</mat-sidenav>

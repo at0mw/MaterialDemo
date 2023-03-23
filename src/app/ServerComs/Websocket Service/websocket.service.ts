@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core"
 import {environment} from "../../Environments/environments"
-import {Observable, Subject} from "rxjs"
+import {Observable, Subject, tap} from "rxjs"
 import {ModuleConfigMessage} from 'src/models/interfaces/module.config.interface'
 import {AnalogMessage} from "../../../models/interfaces/analog.message.interface"
 import {DigitalMessage} from "../../../models/interfaces/digital.message.interface"
@@ -10,9 +10,11 @@ import {ViewMessage} from "../../../models/interfaces/view.message.interface"
 import {GridModuleConfigsMessage} from "../../../models/interfaces/grid.module.configs.message.interface"
 import {QueryMessage} from "../../../models/interfaces/query.message.interface"
 import {MessageType} from "../../Enums/MessageType"
-import {AuthTokenMessage} from "../../../models/interfaces/auth.token.message"
+import {UserTokenMessage} from "../../../models/interfaces/user.token.message.interface"
 import {AvailableModulesMessage} from "../../../models/interfaces/available.modules.message.interface"
 import {ModuleMessage} from "../../../models/interfaces/module.message.interface"
+import {QueryType} from "../../Enums/QueryType";
+import {ClientUsersMessage} from "../../../models/interfaces/client.users.message.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -32,13 +34,14 @@ export class WebsocketService {
   private availableViews: Subject<ViewMessage[]> = new Subject<ViewMessage[]>()
   private onClose: Subject<CloseEvent> = new Subject<CloseEvent>()
 
+  private users: Subject<UserTokenMessage[]> = new Subject<UserTokenMessage[]>()
+  private usersSave: UserTokenMessage[] = []
   constructor() {
     this.InitialiseWebSocket()
     this.AddWebSocketEventListeners()
   }
-
   private InitialiseWebSocket() {
-    const encodedClientId = ""//encodeURIComponent(username)
+    const encodedClientId = "tomTestClientBrowser"//encodeURIComponent(username)
     const encodedToken = ""//encodeURIComponent(password)
 
     const url = `${environment.CHAT_URL}?clientId=${encodedClientId}&auth-token=${encodedToken}`
@@ -69,10 +72,10 @@ export class WebsocketService {
   }
 
   handleMessage(message: string) {
-    console.log('Received message:', message)
+    //console.log('Received message:', message)
     const messageObject = JSON.parse(message)
     const messageType = messageObject.MessageType
-    // TODO - Do we handle Group Tile Config Messages the same as a single Config Message? Kick them on to Modules?
+
     switch (messageType) {
       case MessageType.AvailableModules:
         this.handleAvailableModulesMessage(messageObject as AvailableModulesMessage)
@@ -89,14 +92,17 @@ export class WebsocketService {
       case MessageType.String:
         this.handleStringMessage(messageObject as StringMessage)
         break
-      case MessageType.AuthToken:
-        this.handleAuthTokenMessage(messageObject as AuthTokenMessage)
+      case MessageType.ClientUsers:
+        this.handleClientUsersMessage(messageObject as ClientUsersMessage)
+        break
+      case MessageType.UserToken:
+        this.handleAuthTokenMessage(messageObject as UserTokenMessage)
         break
       case MessageType.ModuleConfig:
         this.handleModuleConfigMessage(messageObject as ModuleConfigMessage)
         break
-      case MessageType.AvailableGridModuleConfigs:
-        this.handleViewModuleConfigsMessage(messageObject as GridModuleConfigsMessage)
+      case MessageType.TileModulesConfigMessage:
+        this.handleTileModulesConfigMessage(messageObject as GridModuleConfigsMessage)
         break
       default:
         console.log("Invalid Type")
@@ -108,16 +114,18 @@ export class WebsocketService {
     this.moduleConfig.next(message)
   }
 
-  private handleViewModuleConfigsMessage(message: GridModuleConfigsMessage) {
-    this.moduleConfigs.next(message.Modules)
+  private handleTileModulesConfigMessage(message: GridModuleConfigsMessage) {
+    console.log("Tile Modules Config Received...")
+    this.moduleConfigs.next(message.TileModules)
   }
+
+  private handleClientUsersMessage(message: ClientUsersMessage) {
+    this.users.next(message.LoggedInUsers)
+    this.usersSave = message.LoggedInUsers
+  }
+
   handleAvailableViewMessage(message: AvailableViewMessage) {
     this.moduleConfig.next(null)
-    console.log("Available Views: ", message.MessageType)
-    message.AvailableViews.forEach(view => {
-      console.log("View: ", view.Label)
-    })
-    console.log("Available Views: ", message.AvailableViews)
     this.availableViews.next(message.AvailableViews)
   }
 
@@ -137,8 +145,10 @@ export class WebsocketService {
     this.stringMessages.next(message)
   }
 
-  private handleAuthTokenMessage(messageObject1: AuthTokenMessage) {
-    console.log("Auth Message Received: Token: " + messageObject1.Token)
+  private handleAuthTokenMessage(message: UserTokenMessage) {
+    //console.log("Auth Message Received: Token: " + message.Token + " User: " + message);
+    this.usersSave.push(message)
+    this.users.next(this.usersSave)
   }
 
   send(message: any) {
@@ -159,14 +169,22 @@ export class WebsocketService {
 
     let queryMessage: QueryMessage = {
       MessageType: MessageType.Query,
+      QueryType: QueryType.GenericQuery
     }
 
     let jsonString = JSON.stringify(queryMessage)
     this.send(jsonString)
+
+    let userQueryMessage: QueryMessage = {
+      MessageType: MessageType.Query,
+      QueryType: QueryType.ClientLoggedInUsers
+    }
+    let jsonString2 = JSON.stringify(userQueryMessage)
+    this.send(jsonString2)
     } else {
       console.error('WebSocket is not open')
     }
-  }
+    }
 
   ////////// [Subscription Getters] //////////
   get isConnected() {
@@ -191,6 +209,10 @@ export class WebsocketService {
 
   get updates$(): Observable<ModuleConfigMessage[]> {
     return this.updates.asObservable()
+  }
+
+  get users$(): Observable<UserTokenMessage[]> {
+    return this.users.asObservable()
   }
 
   get moduleConfig$(): Observable<ModuleConfigMessage | null> {
@@ -223,4 +245,5 @@ export class WebsocketService {
   //     this.AddWebSocketEventListeners()
   //   }
   // }
+
 }

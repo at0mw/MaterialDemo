@@ -53,3 +53,17 @@
   display: flex;
   align-items: center;
 }
+
+.login-view{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.login-card {
+  position: absolute;
+  top: 0;
+  margin: auto;
+  z-index: 999;
+}

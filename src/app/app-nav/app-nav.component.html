@@ -1,5 +1,7 @@
 <mat-sidenav-container class="sidenav-container">
 
+<!--  TODO Break into Components? -->
+<!--  <app-room-navigation #roomNav [availableViews]="availableViews"></app-room-navigation>-->
   <mat-sidenav #drawer class="sidenav" fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
@@ -7,17 +9,6 @@
     <mat-toolbar>Rooms</mat-toolbar>
     <ng-container *ngIf="availableViews.length > 0">
       <mat-nav-list>
-<!--        <div class="list-selector">-->
-<!--          <a mat-list-item (click)="navigateToHome()" >-->
-<!--            <mat-icon aria-label="Side nav toggle icon">home</mat-icon>-->
-<!--            | Home</a>-->
-<!--        </div>-->
-<!--        <div class="list-selector">-->
-<!--          <a mat-list-item *ngFor="let view of availableViews" (click)="navigateToView(view.Id, view.Label)">-->
-<!--            <i [class]="view.Icon"></i>-->
-<!--            {{ view.Label }}-->
-<!--          </a>-->
-<!--        </div>-->
         <a class="list-selector" mat-list-item (click)="navigateToHome()" >
           <mat-icon aria-label="Side nav toggle icon">home</mat-icon>
           | Home</a>
@@ -30,21 +21,21 @@
   </mat-sidenav>
 
   <mat-menu #userMenu class="sidenav" [style.width.px]="200">
-    <ng-container *ngIf="availableUsers.length > 0">
-      <button mat-menu-item *ngFor="let user of availableUsers" (click)="selectUser(user, user)">
-        <i [class]="user"></i>
-        {{ user }}
+    <ng-container *ngIf="loggedInUsers.length > 0">
+      <button mat-menu-item *ngFor="let user of loggedInUsers" (click)="selectUser(user.Username, user.Token)">
+        <i [class]="user.Username"></i>
+        {{ user.Username }}
       </button>
     </ng-container>
-    <ng-container *ngIf="availableUsers.length === 0">
+    <ng-container *ngIf="loggedInUsers.length === 0">
       <button mat-menu-item  (click)="selectUser('Default', 'Default')">
         <i [class]="'Default'"></i>
         {{ 'Default' }}
       </button>
     </ng-container>
     <mat-divider></mat-divider>
-    <button mat-menu-item (click)="signIn()">Sign In</button>
-    <button *ngIf="availableUsers.length > 0" (click)="signOut()" mat-menu-item>Sign Out</button>
+    <button mat-menu-item (click)="showLoginForm = !showLoginForm">Sign In</button>
+    <button *ngIf="loggedInUsers.length > 0" (click)="signOut()" mat-menu-item>Sign Out</button>
   </mat-menu>
 
   <mat-sidenav-content>
@@ -77,14 +68,18 @@
         </button>
       </div>
     </mat-toolbar>
-
+    <div class="login-view">
+      <mat-card class="login-card" *ngIf="showLoginForm">
+        <app-login (loginPressed)="onLoginPressed()"></app-login>
+      </mat-card>
+    </div>
     <div class="main-view">
 <!--      If home?-->
       <app-home-view *ngIf="isHome"></app-home-view>
 <!--      If a room?-->
       <app-modules-view *ngIf="!isHome"
       [availableModules]="availableModules"
-      [availableModuleConfigs]="moduleConfigMessages"
+      [tileModulesConfig]="tileModuleConfigMessages"
       ></app-modules-view>
     </div>
   </mat-sidenav-content>
