@@ -13,16 +13,21 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 
 import { MatGridListModule } from '@angular/material/grid-list';
-import {MatMenuModule} from "@angular/material/menu";
-import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatBottomSheetModule } from "@angular/material/bottom-sheet";
 import { ModulesViewComponent } from './modules-view/modules-view.component';
 import { HomeViewComponent } from './home-view/home-view.component';
 import { LoginComponent } from './login/login.component';
-import {MatCardModule} from "@angular/material/card";
-import {MatInputModule} from "@angular/material/input";
+import { MatCardModule } from "@angular/material/card";
+import { MatInputModule } from "@angular/material/input";
 import { RoomNavigationComponent } from './room-navigation/room-navigation.component';
-import {FormsModule} from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 import { DynamicTileGridManagerComponent } from './dynamic-tile-grid-manager/dynamic-tile-grid-manager.component';
+import { ButtonPanelComponent } from './Modules/button-panel/button-panel.component';
+import { SourceSelectComponent } from './Modules/source-select/source-select.component';
+import { ThermostatComponent } from './Modules/thermostat/thermostat.component';
+import { KeypadComponent } from './Modules/keypad/keypad.component';
+import { DynamicModuleComponent } from './Modules/dynamic-module/dynamic-module.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +37,12 @@ import { DynamicTileGridManagerComponent } from './dynamic-tile-grid-manager/dyn
     HomeViewComponent,
     LoginComponent,
     RoomNavigationComponent,
-    DynamicTileGridManagerComponent
+    DynamicTileGridManagerComponent,
+    ButtonPanelComponent,
+    SourceSelectComponent,
+    ThermostatComponent,
+    KeypadComponent,
+    DynamicModuleComponent
   ],
   imports: [
     BrowserModule,

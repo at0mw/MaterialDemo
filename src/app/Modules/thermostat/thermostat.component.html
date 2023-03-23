@@ -1,0 +1,31 @@
+<div class="module-div">
+  <h2 class="module-header">A Thermostat {{id}}</h2>
+  <div class="split-thermostat-module">
+    <div class="left-side">
+      <!--        <ng-container class="dynamic-box" *ngFor="let element of elements">-->
+      <!--          <ng-container *ngIf="element.type === elementTypes.Slider">-->
+      <!--            <>{{element.label}}</>-->
+      <!--          </ng-container>-->
+      <!--        </ng-container>-->
+      <!--        <button>Yes</button>-->
+      <!--        <button>Yes</button>-->
+      <!--        <button>Yes</button>-->
+      <!--        <button>Yes</button>-->
+      <!--      <app-radial-slider></app-radial-slider>-->
+    </div>
+    <div class="right-side">
+      <ng-container class="dynamic-box" *ngFor="let element of elements">
+        <ng-container *ngIf="element.Type === elementTypes.Button">
+          <button>{{element.Label}}</button>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngFor="let element of elements">
+        <div class="fan-area">
+          <ng-container *ngIf="element.Type === elementTypes.ToggleButton">
+            <button>{{element.Label}}</button>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

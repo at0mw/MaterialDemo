@@ -1,0 +1,13 @@
+<div class="module-div">
+  <div>
+    <h2 class="module-header">A Source-Select {{id}}</h2>
+    <div class="button-container">
+      <button *ngFor="let element of elements; let i = index"
+              (click)="onSource(element.Id)"
+              [class.toggled]="selectedSource === element.Id"
+              type="button">
+        {{element.Label}}
+      </button>
+    </div>
+  </div>
+</div>

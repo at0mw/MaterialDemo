@@ -1,0 +1,36 @@
+.split-thermostat-module {
+  display: flex;
+  flex-direction: row;
+  width:100%;
+}
+
+:host button{
+  flex-grow: 1;
+  border-radius: 0;
+  margin: 0.4em;
+}
+
+.left-side, .right-side {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.fan-area{
+  width: 100%;
+}
+.fan-area button{
+  width: calc(100% - 0.8em);
+  box-sizing: border-box;
+  border: 10px
+}
+
+.slider {
+  width: 90%;
+  margin: auto;
+  margin-top: 10px;
+  background-color: aqua;
+}
