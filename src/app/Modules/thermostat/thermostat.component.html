@@ -1,17 +1,13 @@
 <div class="module-div">
-  <h2 class="module-header">A Thermostat {{id}}</h2>
+  <div class="header-container">
+    <h2 class="module-header">Thermostat {{id}}</h2>
+  </div>
   <div class="split-thermostat-module">
     <div class="left-side">
-      <!--        <ng-container class="dynamic-box" *ngFor="let element of elements">-->
-      <!--          <ng-container *ngIf="element.type === elementTypes.Slider">-->
-      <!--            <>{{element.label}}</>-->
-      <!--          </ng-container>-->
-      <!--        </ng-container>-->
-      <!--        <button>Yes</button>-->
-      <!--        <button>Yes</button>-->
-      <!--        <button>Yes</button>-->
-      <!--        <button>Yes</button>-->
-      <!--      <app-radial-slider></app-radial-slider>-->
+      <div class="thermostat-dummy">
+        <p>{{sliderValue}}°C</p>
+        <input type="range" min="0" max="50" [(ngModel)]="sliderValue">
+      </div>
     </div>
     <div class="right-side">
       <ng-container class="dynamic-box" *ngFor="let element of elements">

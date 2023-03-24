@@ -2,7 +2,10 @@
 
 .device-grid{
   padding:0;
+  // Account for the borders?
   height: calc( 100% - 60px );
+  border: black;
+  overflow: hidden;
 }
 
 .bottom-toolbar{

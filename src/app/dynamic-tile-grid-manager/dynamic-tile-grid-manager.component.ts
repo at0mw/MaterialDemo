@@ -6,6 +6,10 @@ import {ButtonPanelComponent} from "../Modules/button-panel/button-panel.compone
 import {KeypadComponent} from "../Modules/keypad/keypad.component";
 import {SourceSelectComponent} from "../Modules/source-select/source-select.component";
 import {ThermostatComponent} from "../Modules/thermostat/thermostat.component";
+import {AnalogMessage} from "../../models/interfaces/analog.message.interface";
+import {DigitalMessage} from "../../models/interfaces/digital.message.interface";
+import {StringMessage} from "../../models/interfaces/string.message.interface";
+import {DynamicModuleComponent} from "../Modules/dynamic-module/dynamic-module.component";
 
 interface ModuleInterface {
   id: number;
@@ -21,59 +25,17 @@ interface ModuleInterface {
 })
 export class DynamicTileGridManagerComponent {
   @Input() tileModulesConfig: ModuleConfigMessage[] = []
-  //public componentRefs: ComponentRef<AModuleComponent>[] = []
-  //@ViewChild('dynamicComponentTemplate', { read: ViewContainerRef, static: true }) container!: ViewContainerRef;
+  @ViewChild(DynamicModuleComponent) dynamicModuleComponent!: DynamicModuleComponent;
 
-  ngOnChanges(changes: SimpleChanges) {
-    //this.updateModuleConfigs();
-    //this.updateModules();
+  relayAnalog(analogMessage : AnalogMessage){
+    this.dynamicModuleComponent.sendAnalogMessageToComponent(analogMessage)
   }
 
-  // private updateModuleConfigs() {
-  //   this.tileModulesConfig.forEach(module => {
-  //     console.log("Module Type: " + module.Type);
-  //   })
-  // }
+  relayDigital(digitalMessage : DigitalMessage){
+    this.dynamicModuleComponent.sendDigitalMessageToComponent(digitalMessage)
+  }
 
-  // updateModuleConfigs() {
-  //   this.componentRefs.forEach(componentRef => {
-  //     componentRef.destroy();
-  //   });
-  //   this.componentRefs = [];
-  //
-  //   if(this.container === null){
-  //     console.log("This container is null");
-  //     return;
-  //   }
-  //   console.log("Module Length: " + this.tileModulesConfig.length);
-  //   this.tileModulesConfig.forEach(module => {
-  //     if(module.Type === ModuleType.source_select)
-  //     {
-  //       const componentRef = this.container.createComponent(SourceSelectComponent);
-  //       this.componentRefs.push(componentRef);
-  //       let moduleInstance = componentRef.instance;
-  //       moduleInstance.id = module.Id;
-  //       moduleInstance.elements = module.Elements;
-  //       moduleInstance.type = module.Type;
-  //     }
-  //     else if(module.Type === ModuleType.ButtonPanel)
-  //     {
-  //       const componentRef = this.container.createComponent(ButtonPanelComponent);
-  //       this.componentRefs.push(componentRef);
-  //       let moduleInstance = componentRef.instance;
-  //       moduleInstance.id = module.Id;
-  //       moduleInstance.elements = module.Elements;
-  //       moduleInstance.type = module.Type;
-  //     }
-  //     else if(module.Type === ModuleType.Thermostat)
-  //     {
-  //       const componentRef = this.container.createComponent(ThermostatComponent);
-  //       this.componentRefs.push(componentRef);
-  //       let moduleInstance = componentRef.instance;
-  //       moduleInstance.id = module.Id;
-  //       moduleInstance.elements = module.Elements;
-  //       moduleInstance.type = module.Type;
-  //     }
-  //   });
-  // }
+  relayString(stringMessage : StringMessage){
+    this.dynamicModuleComponent.sendStringMessageToComponent(stringMessage)
+  }
 }

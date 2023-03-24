@@ -32,8 +32,6 @@ export class DynamicModuleComponent {
   constructor(private protoService: ProtocolService) {}
 
   sendAnalogMessageToComponent(message: AnalogMessage) {
-    if(this.tileModuleConfig === null)
-      return;
     if(message.ModuleId === this.tileModuleConfig.Id){
       for (const componentRef of this.componentRefs) {
         const componentInstance = componentRef.instance;
@@ -45,8 +43,7 @@ export class DynamicModuleComponent {
   }
 
   sendDigitalMessageToComponent(message: DigitalMessage) {
-    if(this.tileModuleConfig === null)
-      return;
+    console.log("Receiving Digital Message in Dynamic Module")
     if(message.ModuleId === this.tileModuleConfig.Id){
       for (const componentRef of this.componentRefs) {
         const componentInstance = componentRef.instance;
@@ -58,8 +55,7 @@ export class DynamicModuleComponent {
   }
 
   sendStringMessageToComponent(message: StringMessage) {
-    if(this.tileModuleConfig === null)
-      return;
+    console.log("Receiving String Message in Dynamic Module")
     if(message.ModuleId === this.tileModuleConfig.Id){
       for (const componentRef of this.componentRefs) {
         const componentInstance = componentRef.instance;

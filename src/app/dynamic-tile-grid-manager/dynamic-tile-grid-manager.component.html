@@ -1,6 +1,24 @@
-<mat-grid-list class="device-display-grid" cols="2" rowHeight="50%">
-  <mat-grid-tile *ngFor="let moduleConfig of tileModulesConfig;">
-    <app-dynamic-module [tileModuleConfig]="moduleConfig"></app-dynamic-module>
-  </mat-grid-tile>
-</mat-grid-list>
+<ng-container *ngIf="tileModulesConfig.length < 3">
+  <mat-grid-list class="device-display-grid" cols="2" rowHeight="100%" gutterSize="8px">
+    <mat-grid-tile *ngFor="let moduleConfig of tileModulesConfig;">
+      <app-dynamic-module [tileModuleConfig]="moduleConfig"></app-dynamic-module>
+    </mat-grid-tile>
+  </mat-grid-list>
+</ng-container>
+<ng-container *ngIf="tileModulesConfig.length >= 3 && tileModulesConfig.length <5">
+  <mat-grid-list class="device-display-grid" cols="2" rowHeight="50%" gutterSize="8px">
+    <mat-grid-tile *ngFor="let moduleConfig of tileModulesConfig;">
+      <app-dynamic-module [tileModuleConfig]="moduleConfig"></app-dynamic-module>
+    </mat-grid-tile>
+  </mat-grid-list>
+</ng-container>
+
+<ng-container *ngIf="tileModulesConfig.length >= 5">
+  <mat-grid-list class="device-display-grid" cols="2" rowHeight="33%" gutterSize="8px">
+    <mat-grid-tile *ngFor="let moduleConfig of tileModulesConfig;">
+      <app-dynamic-module [tileModuleConfig]="moduleConfig"></app-dynamic-module>
+    </mat-grid-tile>
+  </mat-grid-list>
+</ng-container>
+
 <!--<ng-template #dynamicComponentTemplate></ng-template>-->

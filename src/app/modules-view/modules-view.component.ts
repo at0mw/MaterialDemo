@@ -1,7 +1,11 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import {Component, Input, SimpleChanges, ViewChild} from '@angular/core';
 import {ViewMessage} from "../../models/interfaces/view.message.interface";
 import {ModuleMessage} from "../../models/interfaces/module.message.interface";
 import {ModuleConfigMessage} from "../../models/interfaces/module.config.interface";
+import {DynamicTileGridManagerComponent} from "../dynamic-tile-grid-manager/dynamic-tile-grid-manager.component";
+import {AnalogMessage} from "../../models/interfaces/analog.message.interface";
+import {DigitalMessage} from "../../models/interfaces/digital.message.interface";
+import {StringMessage} from "../../models/interfaces/string.message.interface";
 
 @Component({
   selector: 'app-modules-view',
@@ -12,23 +16,20 @@ export class ModulesViewComponent {
   // Uni-directional Data Flow
   @Input() availableModules: ModuleMessage[] = [];
   @Input() tileModulesConfig: ModuleConfigMessage[] = []
+  @ViewChild(DynamicTileGridManagerComponent) dynamicTileGridComponent!: DynamicTileGridManagerComponent;
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   this.updateAvailableModules();
-  //   this.updateModuleConfigs();
-  // }
+  relayAnalog(analogMessage : AnalogMessage){
+    this.dynamicTileGridComponent.relayAnalog(analogMessage)
+  }
 
-  // updateAvailableModules(){
-  //   // this.availableModules.forEach(module => {
-  //   //   //console.log("Module: " + module.Label);
-  //   // })
-  // }
-  //
-  // private updateModuleConfigs() {
-  //   this.tileModulesConfig.forEach(module => {
-  //     console.log("Module Type: " + module.Type);
-  //   })
-  // }
+  relayDigital(digitalMessage : DigitalMessage){
+    this.dynamicTileGridComponent.relayDigital(digitalMessage)
+  }
+
+  relayString(stringMessage : StringMessage){
+    this.dynamicTileGridComponent.relayString(stringMessage)
+  }
+
 
   selectModule(Id: number) {
 

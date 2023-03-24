@@ -1,6 +1,29 @@
-button{
-  flex-grow: 1;
-  border-radius: 0;
-  margin: 0.4em;
+button {
+  width: 100px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+img {
+  margin: 5px;
+  width: 40px;
+  height:40px;
+}
+
+.button-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 10px;
+}
+
+.button {
+  padding: 10px;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.header-container{
+  text-align: center;
+}

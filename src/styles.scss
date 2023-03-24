@@ -23,3 +23,45 @@ $my-theme: mat.define-light-theme((
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+button {
+  cursor: pointer;
+  border: 0.2em solid transparent;
+  background-color: rgb(255, 255, 255);
+  border-radius: 4px;
+  //padding: 1em;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 40%);
+  //transition: all 0.2s ease;
+  margin: auto;
+}
+
+.button-div {
+  display: flex;
+  //width: 90%;
+}
+
+button:hover {
+  background-color: black;
+  color: white;
+}
+
+button:disabled {
+  background-color: #eee;
+  color: #aaa;
+  cursor: auto;
+}
+
+button:hover {
+  color: #2c3a41;
+  background-color: #e6e6e6;
+  //left: .1em;
+}
+
+button:active {
+  background-color: #525252;
+  color: #fafafa;
+}
+
+button.toggled {
+  background-color: #525252;
+  color: #fafafa;
+}

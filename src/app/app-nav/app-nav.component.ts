@@ -13,6 +13,7 @@ import {RoomNavigationComponent} from "../room-navigation/room-navigation.compon
 import {UserTokenMessage} from "../../models/interfaces/user.token.message.interface";
 import {QueryMessage} from "../../models/interfaces/query.message.interface";
 import {QueryType} from "../Enums/QueryType";
+import {ModulesViewComponent} from "../modules-view/modules-view.component";
 
 @Component({
   selector: 'app-app-nav',
@@ -21,6 +22,8 @@ import {QueryType} from "../Enums/QueryType";
 })
 export class AppNavComponent {
   @ViewChild('roomNav') roomNav! : RoomNavigationComponent;
+
+  @ViewChild(ModulesViewComponent) modulesViewComponent!: ModulesViewComponent;
   showLoginForm: boolean = false;
   isHome: boolean = true;
   currentViewLabel: string = "Home"
@@ -34,7 +37,10 @@ export class AppNavComponent {
   tileModulesConfigMessageSubscription: Subscription
   availableModulesMessageSubscription: Subscription
   wsCloseSubscription: Subscription
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  analogSubscription: Subscription;
+  digitalSubscription: Subscription;
+  stringSubscription: Subscription;
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Medium)
     .pipe(
       map(result => result.matches),
       shareReplay()
@@ -56,6 +62,18 @@ export class AppNavComponent {
     this.loggedInUsersMessageSubscription = this.websocketService.users$.subscribe(users => {
       this.loggedInUsers = users
     })
+
+    this.analogSubscription = this.websocketService.analogMessages$.subscribe(analogMessage => {
+      this.modulesViewComponent.relayAnalog(analogMessage);
+    });
+
+    this.digitalSubscription = this.websocketService.digitalMessages$.subscribe(digitalMessage => {
+      this.modulesViewComponent.relayDigital(digitalMessage);
+    });
+
+    this.stringSubscription = this.websocketService.stringMessages$.subscribe(stringMessage => {
+      this.modulesViewComponent.relayString(stringMessage);
+    });
 
     this.wsCloseSubscription = this.websocketService.close$.subscribe((event: CloseEvent) => {
       this.availableViews = []

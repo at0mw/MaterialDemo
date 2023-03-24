@@ -3,9 +3,12 @@
 <!--  TODO Break into Components? -->
 <!--  <app-room-navigation #roomNav [availableViews]="availableViews"></app-room-navigation>-->
   <mat-sidenav #drawer class="sidenav" fixedInViewport
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
+               [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isHandset$ | async) ? 'over' : 'side'"
+               [opened]="(isHandset$ | async) === false">
+<!--      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"-->
+<!--      [mode]="(isHandset$ | async) ? 'over' : 'side'"-->
+<!--      [opened]="(isHandset$ | async) === false">-->
     <mat-toolbar>Rooms</mat-toolbar>
     <ng-container *ngIf="availableViews.length > 0">
       <mat-nav-list>
@@ -39,7 +42,7 @@
   </mat-menu>
 
   <mat-sidenav-content>
-    <mat-toolbar color="primary" class="top-toolbar">
+    <mat-toolbar color="primary" class="top-toolbar, mat-elevation-z4">
 
       <div class="left-align">
         <button

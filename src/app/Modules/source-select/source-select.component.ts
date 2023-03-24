@@ -54,7 +54,7 @@ export class SourceSelectComponent extends AModuleComponent {
   }
 
   receiveDigitalMessage(elementId: number, state: boolean) {
-    //console.log("Digital Message Received. ElementID: " + elementId + " State: " + state);
+    console.log("Digital Message Received. ElementID: " + elementId + " State: " + state);
     this.updateSourceActive(elementId, state);
   }
 

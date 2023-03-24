@@ -9,7 +9,7 @@ import {AModuleComponent} from "../a-module/a-module.component";
 })
 export class ThermostatComponent extends AModuleComponent{
   public elementTypes = ElementType;
-
+  sliderValue = 0;
   constructor() {
     super();
     // console.log("Thermostat Elements Length: "+ this.elements)

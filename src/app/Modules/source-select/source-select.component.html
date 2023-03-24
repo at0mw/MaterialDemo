@@ -1,6 +1,8 @@
 <div class="module-div">
   <div>
-    <h2 class="module-header">A Source-Select {{id}}</h2>
+    <div class="header-container">
+      <h2 class="module-header">Source-Select {{id}}</h2>
+    </div>
     <div class="button-container">
       <button *ngFor="let element of elements; let i = index"
               (click)="onSource(element.Id)"

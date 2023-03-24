@@ -1,5 +1,8 @@
 <div class="module-div">
   <div>
+    <div class="header-container">
+      <h2 class="module-header">Button-Panel {{id}}</h2>
+    </div>
     <div class="button-container">
       <button *ngFor="let element of elements; let i = index"
               (click)="onSelect(element.Id)"
@@ -9,6 +12,7 @@
     </div>
   </div>
 </div>
+
 <!--<mat-grid-list class="button-grid" cols="6" rowHeight="2:1">-->
 <!--  <mat-grid-tile *ngFor="let element of elements;">-->
 <!--    <button>-->
