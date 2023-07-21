@@ -1,5 +1,5 @@
 import {Component, Input, SimpleChanges, ComponentRef, ViewChild, ViewContainerRef} from '@angular/core';
-import {ModuleConfigMessage} from "../../../models/interfaces/module.config.interface";
+import {DeviceConfigMessage} from "../../../models/interfaces/device.config.interface";
 import {ModuleType} from "../../Enums/ModuleType";
 import {StringMessage} from "../../../models/interfaces/string.message.interface";
 import {SourceSelectComponent} from "../source-select/source-select.component";
@@ -22,17 +22,18 @@ import {AModuleComponent} from "../a-module/a-module.component";
 export class DynamicModuleComponent {
   @ViewChild('dynamicComponentTemplate', { read: ViewContainerRef, static: true }) container!: ViewContainerRef;
   // Initialise as Default Component
-  @Input() tileModuleConfig: ModuleConfigMessage = {
-    Id: -1,
-    Elements: [] = [],
-    Type: ModuleType.Undefined,
+  @Input() tileModuleConfig: DeviceConfigMessage = {
+    DeviceId: -1,
+    DeviceIcon: "Hmm",
+    DeviceLabel: "Hmm",
+    ModuleConfigs: [] = []
   }
   private componentRefs: ComponentRef<AModuleComponent> [] = [];
 
   constructor(private protoService: ProtocolService) {}
 
   sendAnalogMessageToComponent(message: AnalogMessage) {
-    if(message.ModuleId === this.tileModuleConfig.Id){
+    if(message.ModuleId === this.tileModuleConfig.DeviceId){
       for (const componentRef of this.componentRefs) {
         const componentInstance = componentRef.instance;
         if (componentInstance) {
@@ -44,7 +45,7 @@ export class DynamicModuleComponent {
 
   sendDigitalMessageToComponent(message: DigitalMessage) {
     console.log("Receiving Digital Message in Dynamic Module")
-    if(message.ModuleId === this.tileModuleConfig.Id){
+    if(message.ModuleId === this.tileModuleConfig.DeviceId){
       for (const componentRef of this.componentRefs) {
         const componentInstance = componentRef.instance;
         if (componentInstance) {
@@ -56,7 +57,7 @@ export class DynamicModuleComponent {
 
   sendStringMessageToComponent(message: StringMessage) {
     console.log("Receiving String Message in Dynamic Module")
-    if(message.ModuleId === this.tileModuleConfig.Id){
+    if(message.ModuleId === this.tileModuleConfig.DeviceId){
       for (const componentRef of this.componentRefs) {
         const componentInstance = componentRef.instance;
         if (componentInstance) {
@@ -84,41 +85,41 @@ export class DynamicModuleComponent {
       return;
     }
 
-    if(this.tileModuleConfig.Type === ModuleType.source_select)
-    {
-      //console.log("Creating Source Select");
-      const componentRef = this.container.createComponent(SourceSelectComponent);
-      this.componentRefs.push(componentRef);
-      let moduleInstance = componentRef.instance;
-      moduleInstance.id = this.tileModuleConfig.Id;
-      moduleInstance.elements = this.tileModuleConfig.Elements;
-      moduleInstance.type = this.tileModuleConfig.Type;
-    }
-    else if(this.tileModuleConfig.Type === ModuleType.ButtonPanel)
-    {
-      //console.log("Creating ButtonPanel");
-      const componentRef = this.container.createComponent(ButtonPanelComponent);
-      this.componentRefs.push(componentRef);
-      let moduleInstance = componentRef.instance;
-      moduleInstance.id = this.tileModuleConfig.Id;
-      moduleInstance.elements = this.tileModuleConfig.Elements;
-      moduleInstance.type = this.tileModuleConfig.Type;
-    }
-    else if(this.tileModuleConfig.Type === ModuleType.Thermostat)
-    {
-      //console.log("Creating Thermostat");
-      const componentRef = this.container.createComponent(ThermostatComponent);
-      this.componentRefs.push(componentRef);
-      let moduleInstance = componentRef.instance;
-      moduleInstance.id = this.tileModuleConfig.Id;
-      moduleInstance.elements = this.tileModuleConfig.Elements;
-      moduleInstance.type = this.tileModuleConfig.Type;
-    }
+    // if(this.tileModuleConfig.Type === ModuleType.source_select)
+    // {
+    //   //console.log("Creating Source Select");
+    //   const componentRef = this.container.createComponent(SourceSelectComponent);
+    //   this.componentRefs.push(componentRef);
+    //   let moduleInstance = componentRef.instance;
+    //   moduleInstance.id = this.tileModuleConfig.DeviceId;
+    //   moduleInstance.elements = this.tileModuleConfig.Elements;
+    //   moduleInstance.type = this.tileModuleConfig.Type;
+    // }
+    // else if(this.tileModuleConfig.Type === ModuleType.ButtonPanel)
+    // {
+    //   //console.log("Creating ButtonPanel");
+    //   const componentRef = this.container.createComponent(ButtonPanelComponent);
+    //   this.componentRefs.push(componentRef);
+    //   let moduleInstance = componentRef.instance;
+    //   moduleInstance.id = this.tileModuleConfig.Id;
+    //   moduleInstance.elements = this.tileModuleConfig.Elements;
+    //   moduleInstance.type = this.tileModuleConfig.Type;
+    // }
+    // else if(this.tileModuleConfig.Type === ModuleType.Thermostat)
+    // {
+    //   //console.log("Creating Thermostat");
+    //   const componentRef = this.container.createComponent(ThermostatComponent);
+    //   this.componentRefs.push(componentRef);
+    //   let moduleInstance = componentRef.instance;
+    //   moduleInstance.id = this.tileModuleConfig.Id;
+    //   moduleInstance.elements = this.tileModuleConfig.Elements;
+    //   moduleInstance.type = this.tileModuleConfig.Type;
+    // }
 
 
     // Ask for data update
     let moduleDataQueryMessage: QueryMessage = {
-      ModuleId: this.tileModuleConfig.Id,
+      //DeviceId: this.tileModuleConfig,
       QueryType: QueryType.SingleModuleDataQuery,
       MessageType: MessageType.Query
     };

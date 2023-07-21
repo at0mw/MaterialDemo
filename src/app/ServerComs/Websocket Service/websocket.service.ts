@@ -1,20 +1,20 @@
 import {Injectable} from "@angular/core"
 import {environment} from "../../Environments/environments"
 import {Observable, Subject, tap} from "rxjs"
-import {ModuleConfigMessage} from 'src/models/interfaces/module.config.interface'
+import {DeviceConfigMessage} from 'src/models/interfaces/device.config.interface'
 import {AnalogMessage} from "../../../models/interfaces/analog.message.interface"
 import {DigitalMessage} from "../../../models/interfaces/digital.message.interface"
 import {StringMessage} from "../../../models/interfaces/string.message.interface"
-import {AvailableViewMessage} from "../../../models/interfaces/available.view.message.interface"
-import {ViewMessage} from "../../../models/interfaces/view.message.interface"
-import {GridModuleConfigsMessage} from "../../../models/interfaces/grid.module.configs.message.interface"
+import {AvailableRoomsMessage} from "../../../models/interfaces/available.rooms.message.interface"
+import {ClientInfoMessage} from "../../../models/interfaces/client.info.message.interface"
+import {RoomMessage} from "../../../models/interfaces/room.message.interface"
 import {QueryMessage} from "../../../models/interfaces/query.message.interface"
 import {MessageType} from "../../Enums/MessageType"
-import {UserTokenMessage} from "../../../models/interfaces/user.token.message.interface"
-import {AvailableModulesMessage} from "../../../models/interfaces/available.modules.message.interface"
-import {ModuleMessage} from "../../../models/interfaces/module.message.interface"
+import {AvailableDevicesMessage} from "../../../models/interfaces/available.devices.message.interface"
+import {DeviceMessage} from "../../../models/interfaces/device.message.interface"
 import {QueryType} from "../../Enums/QueryType";
-import {ClientUsersMessage} from "../../../models/interfaces/client.users.message.interface";
+import {AvailableUsersMessage} from "../../../models/interfaces/client.users.message.interface";
+import { UserMessage } from "src/models/interfaces/user.message.interface"
 
 @Injectable({
   providedIn: 'root'
@@ -27,16 +27,15 @@ export class WebsocketService {
   private analogMessages: Subject<AnalogMessage> = new Subject<AnalogMessage>()
   private digitalMessages: Subject<DigitalMessage> = new Subject<DigitalMessage>()
   private stringMessages: Subject<StringMessage> = new Subject<StringMessage>()
-  private moduleConfig: Subject<ModuleConfigMessage | null> = new Subject<ModuleConfigMessage | null>()
-  private moduleConfigs: Subject<ModuleConfigMessage[]> = new Subject<ModuleConfigMessage[]>()
-  private updates: Subject<ModuleConfigMessage[]> = new Subject<ModuleConfigMessage[]>()
-  private availableModules: Subject<ModuleMessage[]> = new Subject<ModuleMessage[]>()
-  private availableViews: Subject<ViewMessage[]> = new Subject<ViewMessage[]>()
+  private deviceConfig: Subject<DeviceConfigMessage | null> = new Subject<DeviceConfigMessage | null>()
+  private updates: Subject<DeviceConfigMessage[]> = new Subject<DeviceConfigMessage[]>()
+  private availableDevices: Subject<DeviceMessage[]> = new Subject<DeviceMessage[]>()
+  private availableViews: Subject<RoomMessage[]> = new Subject<RoomMessage[]>()
   private onClose: Subject<CloseEvent> = new Subject<CloseEvent>()
 
-  private users: Subject<UserTokenMessage[]> = new Subject<UserTokenMessage[]>()
-  private usersSave: UserTokenMessage[] = []
+  private users: Subject<UserMessage[]> = new Subject<UserMessage[]>()
   constructor() {
+    console.log("Begin WebSocketService")
     this.InitialiseWebSocket()
     this.AddWebSocketEventListeners()
   }
@@ -72,16 +71,16 @@ export class WebsocketService {
   }
 
   handleMessage(message: string) {
-    //console.log('Received message:', message)
+    console.log('Received message:', message)
     const messageObject = JSON.parse(message)
     const messageType = messageObject.MessageType
 
     switch (messageType) {
-      case MessageType.AvailableModules:
-        this.handleAvailableModulesMessage(messageObject as AvailableModulesMessage)
+      case MessageType.AvailableDevices:
+        this.handleAvailableDevicesMessage(messageObject as AvailableDevicesMessage)
         break
-      case MessageType.AvailableViews:
-        this.handleAvailableViewMessage(messageObject as AvailableViewMessage)
+      case MessageType.AvailableRooms:
+        this.handleAvailableViewMessage(messageObject as AvailableRoomsMessage)
         break
       case MessageType.Analog:
         this.handleAnalogMessage(messageObject as AnalogMessage)
@@ -92,45 +91,43 @@ export class WebsocketService {
       case MessageType.String:
         this.handleStringMessage(messageObject as StringMessage)
         break
-      case MessageType.ClientUsers:
-        this.handleClientUsersMessage(messageObject as ClientUsersMessage)
+      case MessageType.AvailableUsers:
+        this.handleClientUsersMessage(messageObject as AvailableUsersMessage)
         break
-      case MessageType.UserToken:
-        this.handleAuthTokenMessage(messageObject as UserTokenMessage)
-        break
-      case MessageType.ModuleConfig:
-        this.handleModuleConfigMessage(messageObject as ModuleConfigMessage)
-        break
-      case MessageType.TileModulesConfigMessage:
-        this.handleTileModulesConfigMessage(messageObject as GridModuleConfigsMessage)
-        break
+      case MessageType.ClientInfo:
+        this.handleClientInfoMessage(messageObject as ClientInfoMessage)
+        break;
+      case MessageType.DeviceConfig:
+        this.handleDeviceConfigMessage(messageObject as DeviceConfigMessage)
+        break;
       default:
         console.log("Invalid Type")
         break
     }
   }
 
-  handleModuleConfigMessage(message: ModuleConfigMessage) {
-    this.moduleConfig.next(message)
+  handleDeviceConfigMessage(message: DeviceConfigMessage) {
+    this.deviceConfig.next(message)
   }
 
-  private handleTileModulesConfigMessage(message: GridModuleConfigsMessage) {
-    console.log("Tile Modules Config Received...")
-    this.moduleConfigs.next(message.TileModules)
+
+  private handleClientInfoMessage(message: ClientInfoMessage) {
+    console.log('ClientInfo: ', message.InfoType, message.Message)
   }
 
-  private handleClientUsersMessage(message: ClientUsersMessage) {
-    this.users.next(message.LoggedInUsers)
-    this.usersSave = message.LoggedInUsers
+  private handleClientUsersMessage(message: AvailableUsersMessage) {
+    this.users.next(message.Users)
+    //this.user = message.Users
   }
 
-  handleAvailableViewMessage(message: AvailableViewMessage) {
-    this.moduleConfig.next(null)
-    this.availableViews.next(message.AvailableViews)
+
+  handleAvailableViewMessage(message: AvailableRoomsMessage) {
+    this.deviceConfig.next(null)
+    this.availableViews.next(message.Rooms)
   }
 
-  handleAvailableModulesMessage(message: AvailableModulesMessage) {
-    this.availableModules.next(message.Modules)
+  handleAvailableDevicesMessage(message: AvailableDevicesMessage) {
+    this.availableDevices.next(message.Devices)
   }
 
   handleAnalogMessage(message: AnalogMessage) {
@@ -143,12 +140,6 @@ export class WebsocketService {
 
   handleStringMessage(message: StringMessage) {
     this.stringMessages.next(message)
-  }
-
-  private handleAuthTokenMessage(message: UserTokenMessage) {
-    //console.log("Auth Message Received: Token: " + message.Token + " User: " + message);
-    this.usersSave.push(message)
-    this.users.next(this.usersSave)
   }
 
   send(message: any) {
@@ -207,43 +198,27 @@ export class WebsocketService {
     return this.messages.asObservable()
   }
 
-  get updates$(): Observable<ModuleConfigMessage[]> {
+  get updates$(): Observable<DeviceConfigMessage[]> {
     return this.updates.asObservable()
   }
 
-  get users$(): Observable<UserTokenMessage[]> {
-    return this.users.asObservable()
+  get deviceConfig$(): Observable<DeviceConfigMessage | null> {
+    return this.deviceConfig.asObservable()
   }
 
-  get moduleConfig$(): Observable<ModuleConfigMessage | null> {
-    return this.moduleConfig.asObservable()
-  }
-
-  get tileModuleConfig$(): Observable<ModuleConfigMessage[]> {
-    return this.moduleConfigs.asObservable()
-  }
-
-  get availableViews$(): Observable<ViewMessage[]> {
+  get availableViews$(): Observable<RoomMessage[]> {
     return this.availableViews.asObservable()
   }
 
-  get availableModules$(): Observable<ModuleMessage[]> {
-    return this.availableModules.asObservable()
+  get availableDevices$(): Observable<DeviceMessage[]> {
+    return this.availableDevices.asObservable()
   }
 
   get close$(): Observable<CloseEvent> {
     return this.onClose.asObservable()
   }
-
-  get gridModuleConfigMessages$(): Observable<ModuleConfigMessage[]> {
-    return this.moduleConfigs.asObservable()
+  
+  get users$(): Observable<UserMessage[]> {
+    return this.users.asObservable()
   }
-
-  // retryOpen(username: string, password: string) {
-  //   //console.log('Trying to connect with Username: '+ username + ', Password: ' + password)
-  //   if (!this.isConnected) {
-  //     this.AddWebSocketEventListeners()
-  //   }
-  // }
-
 }

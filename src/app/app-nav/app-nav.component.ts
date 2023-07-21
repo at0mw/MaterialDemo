@@ -2,18 +2,19 @@ import {Component, ViewChild} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Observable, Subscription} from 'rxjs';
 import {map, shareReplay} from 'rxjs/operators';
-import {ViewMessage} from "../../models/interfaces/view.message.interface";
+import {RoomMessage} from "../../models/interfaces/room.message.interface";
 import {WebsocketService} from "../ServerComs/Websocket Service/websocket.service";
 import {ProtocolService} from "../ServerComs/Protocol/protocol.service";
 import {NavigationMessage} from "../../models/interfaces/navigation.message.interface";
 import {MessageType} from "../Enums/MessageType";
-import {ModuleMessage} from "../../models/interfaces/module.message.interface";
-import {ModuleConfigMessage} from "../../models/interfaces/module.config.interface";
+import {DeviceMessage} from "../../models/interfaces/device.message.interface";
+import {DeviceConfigMessage} from "../../models/interfaces/device.config.interface";
 import {RoomNavigationComponent} from "../room-navigation/room-navigation.component";
-import {UserTokenMessage} from "../../models/interfaces/user.token.message.interface";
+import {UserMessage} from "../../models/interfaces/user.message.interface";
 import {QueryMessage} from "../../models/interfaces/query.message.interface";
 import {QueryType} from "../Enums/QueryType";
-import {ModulesViewComponent} from "../modules-view/modules-view.component";
+import {DevicesViewComponent} from "../devices-view/devices-view.component";
+import { NavigationType } from '../Enums/NavigationType';
 
 @Component({
   selector: 'app-app-nav',
@@ -23,18 +24,18 @@ import {ModulesViewComponent} from "../modules-view/modules-view.component";
 export class AppNavComponent {
   @ViewChild('roomNav') roomNav! : RoomNavigationComponent;
 
-  @ViewChild(ModulesViewComponent) modulesViewComponent!: ModulesViewComponent;
+  @ViewChild(DevicesViewComponent) devicesViewComponent!: DevicesViewComponent;
   showLoginForm: boolean = false;
   isHome: boolean = true;
   currentViewLabel: string = "Home"
-  availableViews: ViewMessage[] = []
-  availableModules: ModuleMessage[] = []
-  tileModuleConfigMessages: ModuleConfigMessage[] = []
+  availableViews: RoomMessage[] = []
+  availableDevices: DeviceMessage[] = []
+  deviceConfigMessage?: DeviceConfigMessage | null
   // This will be a list of UserObjects but not yet
-  loggedInUsers: UserTokenMessage[] = []
+  loggedInUsers: UserMessage[] = []
   loggedInUsersMessageSubscription: Subscription
   availableViewsMessagesSubscription: Subscription
-  tileModulesConfigMessageSubscription: Subscription
+  deviceConfigMessageSubscription: Subscription
   availableModulesMessageSubscription: Subscription
   wsCloseSubscription: Subscription
   analogSubscription: Subscription;
@@ -51,12 +52,12 @@ export class AppNavComponent {
       this.availableViews = views
     })
 
-    this.availableModulesMessageSubscription = this.websocketService.availableModules$.subscribe(modules => {
-      this.availableModules = modules
+    this.availableModulesMessageSubscription = this.websocketService.availableDevices$.subscribe(devices => {
+      this.availableDevices = devices
     })
 
-    this.tileModulesConfigMessageSubscription = this.websocketService.gridModuleConfigMessages$.subscribe(moduleConfigs => {
-      this.tileModuleConfigMessages = moduleConfigs
+    this.deviceConfigMessageSubscription = this.websocketService.deviceConfig$.subscribe(deviceConfig => {
+      this.deviceConfigMessage = deviceConfig
     })
 
     this.loggedInUsersMessageSubscription = this.websocketService.users$.subscribe(users => {
@@ -64,33 +65,34 @@ export class AppNavComponent {
     })
 
     this.analogSubscription = this.websocketService.analogMessages$.subscribe(analogMessage => {
-      this.modulesViewComponent.relayAnalog(analogMessage);
+      this.devicesViewComponent.relayAnalog(analogMessage);
     });
 
     this.digitalSubscription = this.websocketService.digitalMessages$.subscribe(digitalMessage => {
-      this.modulesViewComponent.relayDigital(digitalMessage);
+      this.devicesViewComponent.relayDigital(digitalMessage);
     });
 
     this.stringSubscription = this.websocketService.stringMessages$.subscribe(stringMessage => {
-      this.modulesViewComponent.relayString(stringMessage);
+      this.devicesViewComponent.relayString(stringMessage);
     });
 
     this.wsCloseSubscription = this.websocketService.close$.subscribe((event: CloseEvent) => {
       this.availableViews = []
-      this.tileModuleConfigMessages = []
+      this.deviceConfigMessage = null
     })
   }
-  navigateToView(viewId: string, viewLabel: string): void {
+  navigateToView(viewId: number, viewLabel: string): void {
     // Navigate to the selected view using your preferred routing mechanism?
     this.currentViewLabel = viewLabel
     this.sendNavigateCommand(viewId)
-    this.requestPossibleTileModules()
+    //this.requestPossibleTileModules()
   }
 
-  sendNavigateCommand(viewId: string) {
+  sendNavigateCommand(viewId: number) {
     this.isHome = false;
     let navigationMessage: NavigationMessage = {
-      ViewId: viewId,
+      RoomId: viewId,
+      NavigationType: NavigationType.SpecificLocation,
       MessageType: MessageType.Navigation
     }
     this.protoService.send(navigationMessage)
@@ -109,17 +111,7 @@ export class AppNavComponent {
     this.wsCloseSubscription.unsubscribe()
   }
 
-  selectUser(Username: string, Token: string) {
-    console.log("Selecting User... Login Page?")
-    let switchUser: UserTokenMessage = {
-      Username: Username,
-      Token: Token,
-      MessageType: MessageType.UserToken
-    }
-    this.protoService.send(switchUser)
-  }
-
-  signIn() {
+  signIn(username: string, password: string) {
     //console.log("Signing In... Login Page?")
   }
 

@@ -4,5 +4,5 @@ import {QueryType} from "../../app/Enums/QueryType";
 export interface QueryMessage {
   MessageType: MessageType.Query;
   QueryType: QueryType;
-  ModuleId?: number;
+  DeviceId?: number;
 }

@@ -1,6 +1,6 @@
 import {Component, Input, ViewChild} from '@angular/core';
-import {AvailableViewMessage} from "../../models/interfaces/available.view.message.interface";
-import {ViewMessage} from "../../models/interfaces/view.message.interface";
+import {AvailableRoomsMessage} from "../../models/interfaces/available.rooms.message.interface";
+import {RoomMessage} from "../../models/interfaces/room.message.interface";
 import {Observable} from "rxjs";
 import {map, shareReplay} from "rxjs/operators";
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -13,7 +13,7 @@ import { MatSidenav} from "@angular/material/sidenav";
 })
 export class RoomNavigationComponent {
   @ViewChild('drawer') drawer!: MatSidenav;
-  @Input() availableViews: ViewMessage[] = [];
+  @Input() availableViews: RoomMessage[] = [];
 
   constructor(private breakpointObserver: BreakpointObserver) {
   }

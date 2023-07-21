@@ -1,7 +1,8 @@
 import {MessageType} from "../../app/Enums/MessageType";
-import {UserTokenMessage} from "./user.token.message.interface";
+import {UserMessage} from "./user.message.interface";
 
-export interface ClientUsersMessage {
-  LoggedInUsers: UserTokenMessage[];
-  MessageType: MessageType.ClientUsers;
+export interface AvailableUsersMessage {
+  CurrentUser: UserMessage;
+  Users: UserMessage[];
+  MessageType: MessageType.AvailableUsers;
 }

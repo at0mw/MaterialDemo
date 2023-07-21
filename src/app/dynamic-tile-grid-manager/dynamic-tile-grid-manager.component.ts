@@ -1,5 +1,5 @@
 import {Component, ComponentRef, Input, SimpleChanges, ViewChild, ViewContainerRef} from '@angular/core';
-import {ModuleConfigMessage} from "../../models/interfaces/module.config.interface";
+import {DeviceConfigMessage, ModuleConfigMessage} from "../../models/interfaces/device.config.interface";
 import {AModuleComponent} from "../Modules/a-module/a-module.component";
 import {ModuleType} from "../Enums/ModuleType";
 import {ButtonPanelComponent} from "../Modules/button-panel/button-panel.component";
@@ -24,7 +24,7 @@ interface ModuleInterface {
   styleUrls: ['./dynamic-tile-grid-manager.component.scss']
 })
 export class DynamicTileGridManagerComponent {
-  @Input() tileModulesConfig: ModuleConfigMessage[] = []
+  @Input() deviceConfig?: DeviceConfigMessage | null
   @ViewChild(DynamicModuleComponent) dynamicModuleComponent!: DynamicModuleComponent;
 
   relayAnalog(analogMessage : AnalogMessage){

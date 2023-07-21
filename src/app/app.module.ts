@@ -15,7 +15,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from "@angular/material/menu";
 import { MatBottomSheetModule } from "@angular/material/bottom-sheet";
-import { ModulesViewComponent } from './modules-view/modules-view.component';
+import { DevicesViewComponent } from './devices-view/devices-view.component';
 import { HomeViewComponent } from './home-view/home-view.component';
 import { LoginComponent } from './login/login.component';
 import { MatCardModule } from "@angular/material/card";
@@ -33,7 +33,7 @@ import { DynamicModuleComponent } from './Modules/dynamic-module/dynamic-module.
   declarations: [
     AppComponent,
     AppNavComponent,
-    ModulesViewComponent,
+    DevicesViewComponent,
     HomeViewComponent,
     LoginComponent,
     RoomNavigationComponent,

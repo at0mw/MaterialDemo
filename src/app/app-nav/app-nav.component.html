@@ -1,14 +1,10 @@
 <mat-sidenav-container class="sidenav-container">
 
 <!--  TODO Break into Components? -->
-<!--  <app-room-navigation #roomNav [availableViews]="availableViews"></app-room-navigation>-->
   <mat-sidenav #drawer class="sidenav" fixedInViewport
                [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
                [mode]="(isHandset$ | async) ? 'over' : 'side'"
                [opened]="(isHandset$ | async) === false">
-<!--      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"-->
-<!--      [mode]="(isHandset$ | async) ? 'over' : 'side'"-->
-<!--      [opened]="(isHandset$ | async) === false">-->
     <mat-toolbar>Rooms</mat-toolbar>
     <ng-container *ngIf="availableViews.length > 0">
       <mat-nav-list>
@@ -25,13 +21,13 @@
 
   <mat-menu #userMenu class="sidenav" [style.width.px]="200">
     <ng-container *ngIf="loggedInUsers.length > 0">
-      <button mat-menu-item *ngFor="let user of loggedInUsers" (click)="selectUser(user.Username, user.Token)">
+      <button mat-menu-item *ngFor="let user of loggedInUsers" (click)="signIn(user.Username, user.Username)">
         <i [class]="user.Username"></i>
         {{ user.Username }}
       </button>
     </ng-container>
     <ng-container *ngIf="loggedInUsers.length === 0">
-      <button mat-menu-item  (click)="selectUser('Default', 'Default')">
+      <button mat-menu-item  (click)="signOut()">
         <i [class]="'Default'"></i>
         {{ 'Default' }}
       </button>
@@ -80,10 +76,10 @@
 <!--      If home?-->
       <app-home-view *ngIf="isHome"></app-home-view>
 <!--      If a room?-->
-      <app-modules-view *ngIf="!isHome"
-      [availableModules]="availableModules"
-      [tileModulesConfig]="tileModuleConfigMessages"
-      ></app-modules-view>
+      <app-devices-view *ngIf="!isHome"
+      [availableDevices]="availableDevices"
+      [deviceConfig]="deviceConfigMessage"
+      ></app-devices-view>
     </div>
   </mat-sidenav-content>
 

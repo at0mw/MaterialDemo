@@ -1,6 +1,6 @@
 <div class="device-grid">
 <!--  Swap in and out for tile grid or single module. Or render single in container over grid-->
-  <app-dynamic-tile-grid-manager [tileModulesConfig]="tileModulesConfig"></app-dynamic-tile-grid-manager>
+  <app-dynamic-tile-grid-manager [deviceConfig]="deviceConfig"></app-dynamic-tile-grid-manager>
 </div>
 
 <mat-toolbar color="primary" class="bottom-toolbar, mat-elevation-z4">
@@ -28,9 +28,9 @@
 </mat-toolbar>
 
 <mat-menu #deviceMenu class="sidenav" [style.width.px]="200">
-  <ng-container *ngIf="availableModules.length > 0">
-    <button mat-menu-item *ngFor="let module of availableModules" (click)="selectModule(module.Id)">
-      {{ module.Label }}
+  <ng-container *ngIf="availableDevices.length > 0">
+    <button mat-menu-item *ngFor="let device of availableDevices" (click)="selectDevice(device.Id)">
+      {{ device.Type }}
     </button>
   </ng-container>
 </mat-menu>
